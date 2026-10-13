@@ -55,9 +55,21 @@ class WS:
  def connect(self):
   u=urllib.parse.urlparse(self.url); raw=socket.create_connection((u.hostname,u.port or 443),20); self.s=ssl.create_default_context().wrap_socket(raw,server_hostname=u.hostname)
   key=base64.b64encode(os.urandom(16)).decode(); path=u.path+('?' + u.query if u.query else '')
-  req=f'GET {path} HTTP/1.1\r\nHost: {u.hostname}\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n'; self.s.sendall(req.encode()); resp=b''
-  while b'\r\n\r\n' not in resp:resp+=self.s.recv(4096)
-  if b' 101 ' not in resp.split(b'\r\n',1)[0]:raise RuntimeError('WEBSOCKET_HANDSHAKE_FEHLER')
+  req=(f'GET {path} HTTP/1.1\r\nHost: {u.hostname}\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\nUser-Agent: HA-AKT-FINNHUB/1.0.1\r\nOrigin: https://finnhub.io\r\n\r\n')
+  self.s.sendall(req.encode()); resp=b''
+  while b'\r\n\r\n' not in resp:
+   chunk=self.s.recv(4096)
+   if not chunk:raise RuntimeError('WEBSOCKET_HANDSHAKE_KEINE_ANTWORT')
+   resp+=chunk
+   if len(resp)>65536:raise RuntimeError('WEBSOCKET_HANDSHAKE_HEADER_ZU_GROSS')
+  header=resp.split(b'\r\n\r\n',1)[0]; status=header.split(b'\r\n',1)[0].decode(errors='replace')
+  parts=status.split(); code=parts[1] if len(parts)>1 else 'OHNE_STATUS'
+  if code!='101':raise RuntimeError('WEBSOCKET_HANDSHAKE_HTTP_'+code)
+  accept=''
+  for line in header.split(b'\r\n')[1:]:
+   if line.lower().startswith(b'sec-websocket-accept:'):accept=line.split(b':',1)[1].strip().decode(errors='replace');break
+  expected=base64.b64encode(hashlib.sha1((key+'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').encode()).digest()).decode()
+  if accept!=expected:raise RuntimeError('WEBSOCKET_ACCEPT_UNGUELTIG')
  def send(self,obj):
   b=json.dumps(obj,separators=(',',':')).encode(); mask=os.urandom(4); hdr=bytes([129,128|len(b)]) if len(b)<126 else bytes([129,128|126])+struct.pack('!H',len(b)); self.s.sendall(hdr+mask+bytes(x^mask[i%4] for i,x in enumerate(b)))
  def recv(self):

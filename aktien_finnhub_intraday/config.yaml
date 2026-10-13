@@ -1,5 +1,5 @@
-﻿name: Aktien Finnhub Intraday
-version: "1.0.0"
+name: Aktien Finnhub Intraday
+version: "1.0.1"
 slug: aktien_finnhub_intraday
 description: Isolierter Finnhub-WebSocket-Testdienst fuer echte NVDA-Ticks und OHLC-Kerzen
 url: https://github.com/dominikG78/ha-aktien-apps
@@ -33,4 +33,3 @@ schema:
   export_points: int(100,5000)
   warn_free_gb: int(20,400)
   stop_free_gb: int(10,300)
-
