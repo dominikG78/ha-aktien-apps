@@ -53,7 +53,7 @@ def purge():
 class WS:
  def __init__(self,url):self.url=url;self.s=None
  def _diag(self,stage,**extra):
-  safe={"version":"1.0.2","stage":stage,"updated_utc":datetime.now(timezone.utc).isoformat(),"host":"ws.finnhub.io","token_source":"finnhub_api_key_or_finnhub_token","token_length":len(TOKEN),"token_present":bool(TOKEN),"request_path":"/?token=<REDACTED>"}
+  safe={"version":"1.0.3","stage":stage,"updated_utc":datetime.now(timezone.utc).isoformat(),"host":"ws.finnhub.io","token_source":"finnhub_api_key_or_finnhub_token","token_length":len(TOKEN),"token_present":bool(TOKEN),"request_path":"/?token=<REDACTED>"}
   safe.update(extra); atomic(STATUS/'websocket_diagnose.json',safe)
  def connect(self):
   u=urllib.parse.urlparse(self.url); host=u.hostname; port=u.port or 443
@@ -64,8 +64,8 @@ class WS:
   raw=socket.create_connection((host,port),20)
   self.s=ssl.create_default_context().wrap_socket(raw,server_hostname=host); self.s.settimeout(30)
   tls={"tls_version":self.s.version(),"cipher":self.s.cipher()[0] if self.s.cipher() else None,"peer_ip":self.s.getpeername()[0]}
-  key=base64.b64encode(os.urandom(16)).decode(); path=u.path+('?' + u.query if u.query else '')
-  req=(f'GET {path} HTTP/1.1\r\nHost: {host}\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\nUser-Agent: HA-AKT-FINNHUB/1.0.2\r\nOrigin: https://finnhub.io\r\n\r\n')
+  key=base64.b64encode(os.urandom(16)).decode(); path=(u.path or '/')+('?' + u.query if u.query else '')
+  req=(f'GET {path} HTTP/1.1\r\nHost: {host}\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\nUser-Agent: HA-AKT-FINNHUB/1.0.3\r\nOrigin: https://finnhub.io\r\n\r\n')
   self._diag('REQUEST_BEREIT',request_bytes=len(req.encode()),request_headers=['Host','Upgrade','Connection','Sec-WebSocket-Key','Sec-WebSocket-Version','User-Agent','Origin'],**tls)
   self.s.sendall(req.encode()); data=b''
   while b'\r\n\r\n' not in data and len(data)<65536:

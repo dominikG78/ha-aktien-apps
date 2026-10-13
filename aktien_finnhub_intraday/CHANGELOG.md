@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3
+- WebSocket-Requestpfad auf gültige HTTP-Origin-Form mit führendem `/` korrigiert.
+- Leerer `urlparse`-Pfad wird nun sicher als `/` behandelt.
+- Redigierte Eigendiagnose und bestehende Tick-, SQLite-, Export- und Retentionslogik bleiben erhalten.
+
+
 ## 1.0.2
 - Redigierte WebSocket-Eigendiagnose direkt im App-Prozess integriert.
 - DNS-Ziele, Python-/OpenSSL-Version, TLS-Version, Cipher und Peer-IP werden dokumentiert.
