@@ -1,18 +1,15 @@
 # Changelog
 
-## 1.0.1
+## 1.0.2
+- Redigierte WebSocket-Eigendiagnose direkt im App-Prozess integriert.
+- DNS-Ziele, Python-/OpenSSL-Version, TLS-Version, Cipher und Peer-IP werden dokumentiert.
+- Requestlänge und Headernamen werden ohne Tokenwerte protokolliert.
+- HTTP-Statuszeile, Antwortheader und begrenzter Antwortbody werden sicher redigiert.
+- Erfolgreiche Sec-WebSocket-Accept-Prüfung wird nachgewiesen.
+- Tick-, SQLite-, Export- und Retentionslogik bleiben unverändert.
 
-- Finnhub-WebSocket-Handshake an den erfolgreich validierten Upgrade-Request angeglichen
-- `User-Agent` und `Origin` im Upgrade-Request ergaenzt
-- HTTP-Status des Handshakes explizit ausgewertet
-- maximale Handshake-Headergroesse auf 64 KiB begrenzt
-- Verbindungsabbruch vor vollstaendigem Header erkannt
-- `Sec-WebSocket-Accept` nach RFC 6455 validiert
-- bestehende Token-, SQLite-, Daten-, Export- und Retentionslogik unveraendert beibehalten
+## 1.0.1
+- WebSocket-Handshake-Diagnose erweitert.
 
 ## 1.0.0
-
-- Finnhub-WebSocket-Test fuer NVDA
-- SQLite/WAL
-- 10s bis 4h OHLC-Kerzen
-- atomare JSON-Exporte
+- Erstversion.
