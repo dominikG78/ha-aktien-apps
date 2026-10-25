@@ -53,7 +53,7 @@ def purge():
 class WS:
  def __init__(self,url):self.url=url;self.s=None
  def _diag(self,stage,**extra):
-  safe={"version":"1.0.10","stage":stage,"updated_utc":datetime.now(timezone.utc).isoformat(),"host":"ws.finnhub.io","token_source":"finnhub_api_key_or_finnhub_token","token_length":len(TOKEN),"token_present":bool(TOKEN),"request_path":"/?token=<REDACTED>"}
+  safe={"version":"1.0.11","stage":stage,"updated_utc":datetime.now(timezone.utc).isoformat(),"host":"ws.finnhub.io","token_source":"finnhub_api_key_or_finnhub_token","token_length":len(TOKEN),"token_present":bool(TOKEN),"request_path":"/?token=<REDACTED>"}
   safe.update(extra); atomic(STATUS/'websocket_diagnose.json',safe)
  def connect(self):
   u=urllib.parse.urlparse(self.url); host=u.hostname; port=u.port or 443
@@ -115,7 +115,7 @@ class WS:
 
 def main():
  if not CFG['enabled']:stat('INSTALLIERT_DEAKTIVIERT'); time.sleep(2); return
-TOKEN = (os.environ.get("FINNHUB_API_KEY", "") or os.environ.get("FINNHUB_TOKEN", "") or TOKEN).strip()
+ TOKEN = (os.environ.get("FINNHUB_API_KEY", "") or os.environ.get("FINNHUB_TOKEN", "") or TOKEN).strip()
  if not TOKEN:stat('GESPERRT','FINNHUB_TOKEN_FEHLT'); raise SystemExit(2)
  while True:
   try:
