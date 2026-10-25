@@ -8,4 +8,4 @@ COPY service.py /service.py
 RUN chmod 0755 /run.sh /service.py
 
 CMD ["/run.sh"]
-``
+
