@@ -1,6 +1,4 @@
-## 1.0.7
-- S6/PID1-Startfehler korrigiert: kein eigener Docker-`ENTRYPOINT`; Home-Assistant-Basisimage behaelt `/init`.
-- `init: false` gesetzt, damit S6 direkt Prozess 1 bleibt.
-- `CMD ["/run.sh"]` beibehalten.
-- Read-Timeout-Fix unveraendert fortgefuehrt.
-- Tick-, SQLite/WAL-, Candle-, Export- und Retentionslogik unveraendert.
+## 1.0.8
+- Tokenpfad gehaertet: `finnhub_api_key` als optionale geschuetzte App-Option hinzugefuegt.
+- `service.py` liest den Token primaer aus `/data/options.json`, mit bestehendem `secrets.yaml`-Fallback.
+- S6/PID1-Startfix und WebSocket-Read-Timeout-Fix unveraendert fortgefuehrt.
