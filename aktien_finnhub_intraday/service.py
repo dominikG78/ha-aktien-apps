@@ -19,7 +19,20 @@ def token():
   if line.strip().lower().startswith(('finnhub_api_key:','finnhub_token:')):
    return line.split(':',1)[1].strip().strip('"\'')
  return ''
-TOKEN=token()
+def load_token_from_options():
+    try:
+        p = Path("/data/options.json")
+        if p.exists():
+            obj = json.loads(p.read_text(encoding="utf-8"))
+            for key in ("finnhub_api_key", "finnhub_token"):
+                value = str(obj.get(key, "")).strip()
+                if value:
+                    return value
+    except Exception:
+        pass
+    return ""
+
+TOKEN = load_token_from_options() or load_token()
 INTERVALS={'10s':10,'30s':30,'1m':60,'5m':300,'15m':900,'30m':1800,'1h':3600,'4h':14400}
 DB=sqlite3.connect(ACTIVE/'intraday.sqlite3',timeout=30)
 DB.execute('PRAGMA journal_mode=WAL'); DB.execute('PRAGMA synchronous=NORMAL')
