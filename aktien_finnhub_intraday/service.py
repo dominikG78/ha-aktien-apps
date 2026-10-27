@@ -34,13 +34,25 @@ class RegisterWriter:
         self.db_path.parent.mkdir(parents=True,exist_ok=True); self.export_root.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.db_path,timeout=30); self.db.execute('PRAGMA journal_mode=WAL'); self.db.execute('PRAGMA synchronous=NORMAL')
         self.db.executescript('''CREATE TABLE IF NOT EXISTS ticks(instrument_id TEXT,symbol TEXT,source TEXT,event_ms INTEGER,received_ms INTEGER,price REAL,volume REAL,quality TEXT,PRIMARY KEY(instrument_id,source,event_ms,price,volume));CREATE INDEX IF NOT EXISTS ticks_t ON ticks(event_ms);CREATE TABLE IF NOT EXISTS candles(instrument_id TEXT,interval_s INTEGER,bucket_ms INTEGER,open REAL,high REAL,low REAL,close REAL,volume REAL,samples INTEGER,first_ms INTEGER,last_ms INTEGER,source TEXT,quality TEXT,PRIMARY KEY(instrument_id,interval_s,bucket_ms,source));CREATE INDEX IF NOT EXISTS candles_t ON candles(interval_s,bucket_ms);'''); self.db.commit()
-    def add_tick(self,tick):
-        if tick["instrument_id"] != self.rid:
-    raise WriterIsolationError(
-        f"{tick['instrument_id']}->{self.rid}"
-    )
+    def add_tick(self, tick):
+    if tick["instrument_id"] != self.rid:
+        raise WriterIsolationError(
+            f"{tick['instrument_id']}->{self.rid}"
+        )
 
-        cur=self.db.execute('INSERT OR IGNORE INTO ticks VALUES(?,?,?,?,?,?,?,?)',(self.rid,tick['symbol'],tick['source'],tick['event_ms'],tick['received_ms'],tick['price'],tick['volume'],tick['quality']))
+    cur = self.db.execute(
+        'INSERT OR IGNORE INTO ticks VALUES(?,?,?,?,?,?,?,?)',
+        (
+            self.rid,
+            tick['symbol'],
+            tick['source'],
+            tick['event_ms'],
+            tick['received_ms'],
+            tick['price'],
+            tick['volume'],
+            tick['quality'],
+        ),
+    )
         if not cur.rowcount:return
         for _,sec in INTERVALS.items():
             b=(tick['event_ms']//(sec*1000))*(sec*1000)
