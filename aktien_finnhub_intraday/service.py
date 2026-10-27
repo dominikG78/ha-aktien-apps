@@ -35,13 +35,18 @@ class WriterManager:
         if rid not in self.writers:self.writers[rid]=RegisterWriter(self.root,self.instruments[rid])
         return self.writers[rid]
 def load_config():
-    options=json.loads(Path('/data/options.json').read_text())
-    root = Path(options['data_root'])
-    instruments_file = Path('/opt/aktien/instruments.json')
-    payload = json.loads(instruments_file.read_text())     
-    instruments={rid:dict(cfg,instrument_id=rid) for rid,cfg in payload['instruments'].items()}
-    if set(instruments)!=set(f'{i:03d}' for i in range(1,21)):raise SystemExit('INSTRUMENT_SET_INVALID')
-    return options,root,instruments
+    options = json.loads(Path("/data/options.json").read_text())
+    root = Path(options["data_root"])
+    payload = json.loads(
+        INSTRUMENTS_FILE.read_text()
+    )
+    instruments = {
+        rid: dict(cfg, instrument_id=rid)
+        for rid, cfg in payload["instruments"].items()
+    }
+    if set(instruments) != set(f"{i:03d}" for i in range(1, 21)):
+        raise SystemExit("INSTRUMENT_SET_INVALID")
+    return options, root, instruments
 def main():
     options,root,instruments=load_config(); (root/'status').mkdir(parents=True,exist_ok=True)
     atomic_json(root/'status'/'collector.json',{'schema_version':2,'status':'INSTALLIERT_DEAKTIVIERT' if not options['enabled'] else 'BEREIT','version':'1.1.0','updated_utc':datetime.now(timezone.utc).isoformat(),'active_instruments':sum(1 for x in instruments.values() if x['enabled'] and x['live_enabled']),'available_intervals':list(INTERVALS)})
