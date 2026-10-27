@@ -36,7 +36,9 @@ class WriterManager:
         return self.writers[rid]
 def load_config():
     options=json.loads(Path('/data/options.json').read_text())
-    root=Path(options['data_root']); payload=json.loads(Path(options['instruments_file']).read_text())
+    root = Path(options['data_root'])
+    instruments_file = Path('/opt/aktien/instruments.json')
+    payload = json.loads(instruments_file.read_text())     
     instruments={rid:dict(cfg,instrument_id=rid) for rid,cfg in payload['instruments'].items()}
     if set(instruments)!=set(f'{i:03d}' for i in range(1,21)):raise SystemExit('INSTRUMENT_SET_INVALID')
     return options,root,instruments
