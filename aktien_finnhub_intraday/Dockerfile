@@ -5,3 +5,4 @@ COPY service.py /service.py
 COPY instruments.json /config/instruments.json
 RUN chmod 0755 /run.sh /service.py
 CMD ["/run.sh"]
+
