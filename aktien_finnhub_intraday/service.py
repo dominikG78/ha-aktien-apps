@@ -23,9 +23,7 @@ INSTRUMENTS_FILE = Path("/opt/aktien/instruments.json")
 
 class WriterIsolationError(RuntimeError):
     pass
-"version": APP_VERSION
-BUILD_MARKER = "AP5_IMAGE_INTERNAL_INSTRUMENTS_V1"
-INSTRUMENTS_FILE = Path("/opt/aktien/instruments.json")   
+
 def atomic_json(path,obj):
     path.parent.mkdir(parents=True,exist_ok=True); tmp=path.with_suffix(path.suffix+'.tmp')
     tmp.write_text(json.dumps(obj,ensure_ascii=False,separators=(',',':'))); os.replace(tmp,path)
@@ -38,6 +36,7 @@ class RegisterWriter:
         self.db.executescript('''CREATE TABLE IF NOT EXISTS ticks(instrument_id TEXT,symbol TEXT,source TEXT,event_ms INTEGER,received_ms INTEGER,price REAL,volume REAL,quality TEXT,PRIMARY KEY(instrument_id,source,event_ms,price,volume));CREATE INDEX IF NOT EXISTS ticks_t ON ticks(event_ms);CREATE TABLE IF NOT EXISTS candles(instrument_id TEXT,interval_s INTEGER,bucket_ms INTEGER,open REAL,high REAL,low REAL,close REAL,volume REAL,samples INTEGER,first_ms INTEGER,last_ms INTEGER,source TEXT,quality TEXT,PRIMARY KEY(instrument_id,interval_s,bucket_ms,source));CREATE INDEX IF NOT EXISTS candles_t ON candles(interval_s,bucket_ms);'''); self.db.commit()
     def add_tick(self,tick):
         if tick['instrument_id']!=self.rid: raise WriterIsolationError(f"{tick['instrument_id']}->{self.rid}")
+
         cur=self.db.execute('INSERT OR IGNORE INTO ticks VALUES(?,?,?,?,?,?,?,?)',(self.rid,tick['symbol'],tick['source'],tick['event_ms'],tick['received_ms'],tick['price'],tick['volume'],tick['quality']))
         if not cur.rowcount:return
         for _,sec in INTERVALS.items():
@@ -77,10 +76,47 @@ def main():
         f"instruments={INSTRUMENTS_FILE}",
         flush=True,
     )
-    options,root,instruments=load_config(); (root/'status').mkdir(parents=True,exist_ok=True)
-    atomic_json(root/'status'/'collector.json',{'schema_version':2,'status':'INSTALLIERT_DEAKTIVIERT' if not options['enabled'] else 'BEREIT','version':'1.1.0','updated_utc':datetime.now(timezone.utc).isoformat(),'active_instruments':sum(1 for x in instruments.values() if x['enabled'] and x['live_enabled']),'available_intervals':list(INTERVALS)})
-    if not options['enabled']:
-        while True: time.sleep(3600)
-    # Provider/Subscription integration follows only after static gates and controlled runtime release.
-    raise SystemExit('PROVIDER_START_BLOCKED_PENDING_AP5_RUNTIME_RELEASE')
-if __name__=='__main__':main()
+
+    options, root, instruments = load_config()
+
+    status_root = root / "status"
+    status_root.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    atomic_json(
+        status_root / "collector.json",
+        {
+            "schema_version": 2,
+            "status": (
+                "INSTALLIERT_DEAKTIVIERT"
+                if not options["enabled"]
+                else "BEREIT"
+            ),
+            "version": APP_VERSION,
+            "build_marker": BUILD_MARKER,
+            "instruments_file": str(INSTRUMENTS_FILE),
+            "data_root": str(root),
+            "updated_utc": datetime.now(timezone.utc).isoformat(),
+            "active_instruments": sum(
+                1
+                for instrument in instruments.values()
+                if instrument["enabled"]
+                and instrument["live_enabled"]
+            ),
+            "available_intervals": list(INTERVALS),
+        },
+    )
+
+    if not options["enabled"]:
+        while True:
+            time.sleep(3600)
+
+    raise SystemExit(
+        "PROVIDER_START_BLOCKED_PENDING_AP5_RUNTIME_RELEASE"
+    )
+
+
+if __name__ == "__main__":
+    main()
