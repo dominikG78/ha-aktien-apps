@@ -1,9 +1,28 @@
 #!/usr/bin/env python3
-import json, os, sqlite3, time
+
+import json
+import os
+import sqlite3
+import time
+
 from datetime import datetime, timezone
 from pathlib import Path
-INTERVALS={"30s":30,"5m":300,"15m":900,"1h":3600,"4h":14400}
-class WriterIsolationError(RuntimeError): pass
+
+INTERVALS = {
+    "30s": 30,
+    "5m": 300,
+    "15m": 900,
+    "1h": 3600,
+    "4h": 14400,
+}
+
+APP_VERSION = "1.1.5"
+BUILD_MARKER = "AP5_IMAGE_INTERNAL_INSTRUMENTS_V2"
+INSTRUMENTS_FILE = Path("/opt/aktien/instruments.json")
+
+
+class WriterIsolationError(RuntimeError):
+    pass
 "version": APP_VERSION
 BUILD_MARKER = "AP5_IMAGE_INTERNAL_INSTRUMENTS_V1"
 INSTRUMENTS_FILE = Path("/opt/aktien/instruments.json")   
