@@ -1,7 +1,7 @@
 name: Aktien Finnhub Intraday
-version: "1.0.11"
+version: "1.1.0"
 slug: aktien_finnhub_intraday
-description: Isolierter Finnhub-WebSocket-Testdienst fuer echte NVDA-Ticks und OHLC-Kerzen
+description: Generischer Multi-Instrument-Collector fuer Register 001 bis 020
 url: https://github.com/dominikG78/ha-aktien-apps
 arch:
   - amd64
@@ -9,16 +9,16 @@ startup: application
 boot: manual
 init: false
 map:
+  - type: media
+    read_only: false
   - type: share
     read_only: false
-  - type: homeassistant_config
+  - type: addon_config
     read_only: true
 options:
-  enabled: true
-  instrument_id: "006"
-  symbol: NVDA
-  exchange: NASDAQ
-  currency: USD
+  enabled: false
+  instruments_file: /config/instruments.json
+  data_root: /media/COPILOT_DATA/aktien/intraday
   retention_raw_days: 90
   export_points: 1200
   warn_free_gb: 100
@@ -26,10 +26,8 @@ options:
   finnhub_api_key: ""
 schema:
   enabled: bool
-  instrument_id: str
-  symbol: str
-  exchange: str
-  currency: str
+  instruments_file: str
+  data_root: str
   retention_raw_days: int(1,365)
   export_points: int(100,5000)
   warn_free_gb: int(20,400)
