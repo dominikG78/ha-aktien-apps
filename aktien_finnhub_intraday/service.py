@@ -51,6 +51,13 @@ def load_config():
         raise SystemExit("INSTRUMENT_SET_INVALID")
     return options, root, instruments
 def main():
+    print(
+        "AP5_START "
+        f"version={APP_VERSION} "
+        f"build={BUILD_MARKER} "
+        f"instruments={INSTRUMENTS_FILE}",
+        flush=True,
+    )
     options,root,instruments=load_config(); (root/'status').mkdir(parents=True,exist_ok=True)
     atomic_json(root/'status'/'collector.json',{'schema_version':2,'status':'INSTALLIERT_DEAKTIVIERT' if not options['enabled'] else 'BEREIT','version':'1.1.0','updated_utc':datetime.now(timezone.utc).isoformat(),'active_instruments':sum(1 for x in instruments.values() if x['enabled'] and x['live_enabled']),'available_intervals':list(INTERVALS)})
     if not options['enabled']:
