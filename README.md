@@ -1,10 +1,23 @@
-# Home Assistant Aktien Apps
+# Aktien Finnhub Intraday 1.1.0
 
-## Aktien Finnhub Intraday 1.0.10
-- Register-ID `006`, Symbol `NVDA`, NASDAQ, USD
-- Geschuetzte lokale App-Option fuer den Finnhub-Key
-- Tokenuebergabe nur fluechtig von `bashio::config` an den App-Prozess
-- Verifizierte Read-Timeout-Leerlaufbehandlung
-- SQLite/WAL unter `/share/aktien_intraday/active/intraday.sqlite3`
-- Exporte: 10s, 30s, 1m, 5m, 15m, 30m, 1h und 4h
-- Keine automatischen Orders; 009/010 bleiben ohne Livefreigabe
+Generischer AP5 Multi-Instrument-Collector fuer die Register 001 bis 020.
+
+## Architektur
+
+- Persistenter Datenroot: `/media/COPILOT_DATA/aktien/intraday`
+- Registergetrennte SQLite-Pfade: `db/<RID>/intraday.sqlite3`
+- Registergetrennte V2-Exporte: `exports_v2/<RID>/<INTERVALL>.json`
+- Produktionsintervalle: `30s`, `5m`, `15m`, `1h`, `4h`
+- Instrumentenkonfiguration: `instruments.json`
+- Providerstart bleibt bis zur AP5-Runtime-Freigabe gesperrt.
+
+## Schutz
+
+Version 1.1.0 veraendert nicht automatisch:
+
+- `/share/aktien_intraday`
+- `migration_20261027`
+- historische Kursdaten
+- Home-Assistant `.storage`
+
+Legacy-Bereinigung ist nicht Bestandteil dieses Releases.
