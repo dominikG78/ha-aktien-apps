@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 INTERVALS={"30s":30,"5m":300,"15m":900,"1h":3600,"4h":14400}
 class WriterIsolationError(RuntimeError): pass
-APP_VERSION = "1.1.4"
+"version": APP_VERSION
 BUILD_MARKER = "AP5_IMAGE_INTERNAL_INSTRUMENTS_V1"
 INSTRUMENTS_FILE = Path("/opt/aktien/instruments.json")   
 def atomic_json(path,obj):
