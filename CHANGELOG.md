@@ -1,4 +1,4 @@
-"version": APP_VERSION
+"version": "1.1.4"
 
 ### Fixed
 - Move bundled `instruments.json` to `/opt/aktien/instruments.json`.
