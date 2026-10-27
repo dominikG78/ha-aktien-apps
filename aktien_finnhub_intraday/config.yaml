@@ -17,7 +17,7 @@ map:
     read_only: true
 options:
   enabled: false
-  instruments_file: /opt/aktien/instruments.json
+  
   data_root: /media/COPILOT_DATA/aktien/intraday
   retention_raw_days: 90
   export_points: 1200
@@ -26,7 +26,7 @@ options:
   finnhub_api_key: ""
 schema:
   enabled: bool
-  instruments_file: str
+  
   data_root: str
   retention_raw_days: int(1,365)
   export_points: int(100,5000)
