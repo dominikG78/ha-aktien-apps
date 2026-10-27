@@ -1,23 +1,20 @@
-# Aktien Finnhub Intraday 1.1.0
+# Changelog
 
-Generischer AP5 Multi-Instrument-Collector fuer die Register 001 bis 020.
+## 1.1.0
 
-## Architektur
+### Added
+- Generische Instrumentenkonfiguration fuer Register 001 bis 020.
+- Registerisolierter SQLite-Writer.
+- Registerisolierte V2-Exportpfade.
+- Persistenter Datenroot unter `/media/COPILOT_DATA/aktien/intraday`.
+- Schreibbarer `media`-Mount fuer die App.
 
-- Persistenter Datenroot: `/media/COPILOT_DATA/aktien/intraday`
-- Registergetrennte SQLite-Pfade: `db/<RID>/intraday.sqlite3`
-- Registergetrennte V2-Exporte: `exports_v2/<RID>/<INTERVALL>.json`
-- Produktionsintervalle: `30s`, `5m`, `15m`, `1h`, `4h`
-- Instrumentenkonfiguration: `instruments.json`
-- Providerstart bleibt bis zur AP5-Runtime-Freigabe gesperrt.
+### Changed
+- Produktive Candle-Intervalle auf `30s`, `5m`, `15m`, `1h` und `4h` standardisiert.
+- Writer-Routing erfolgt ueber Registerkonfiguration anstelle einer gemeinsamen neuen SQLite-DB.
 
-## Schutz
-
-Version 1.1.0 veraendert nicht automatisch:
-
-- `/share/aktien_intraday`
-- `migration_20261027`
-- historische Kursdaten
-- Home-Assistant `.storage`
-
-Legacy-Bereinigung ist nicht Bestandteil dieses Releases.
+### Safety
+- Providerstart bleibt bis zur AP5-Runtime-Abnahme gesperrt.
+- Bestehender `/share/aktien_intraday`-Bestand bleibt unangetastet.
+- `migration_20261027` und historische Daten bleiben geschuetzt.
+- Keine Legacy-Loeschung in diesem Release.
