@@ -1,0 +1,25 @@
+{
+  "schema_version": 2,
+  "instruments": {
+    "001": {"enabled": true, "symbol": "SAP.DE", "exchange": "XETRA", "currency": "EUR", "live_provider": "FINNHUB", "live_enabled": true, "history_enabled": true},
+    "002": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "003": {"enabled": true, "symbol": "SIE.DE", "exchange": "XETRA", "currency": "EUR", "live_provider": "FINNHUB", "live_enabled": true, "history_enabled": true},
+    "004": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "005": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "006": {"enabled": true, "symbol": "NVDA", "exchange": "NASDAQ", "currency": "USD", "live_provider": "FINNHUB", "live_enabled": true, "history_enabled": true},
+    "007": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "008": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "009": {"enabled": false, "symbol": "SIE.DE", "exchange": "XETRA", "currency": "EUR", "live_provider": "FINNHUB", "live_enabled": false, "history_enabled": true},
+    "010": {"enabled": false, "symbol": "NVDA", "exchange": "NASDAQ", "currency": "USD", "live_provider": "FINNHUB", "live_enabled": false, "history_enabled": true},
+    "011": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "012": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "013": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "014": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "015": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "016": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "017": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "018": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "019": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false},
+    "020": {"enabled": false, "symbol": "", "exchange": "", "currency": "EUR", "live_provider": "", "live_enabled": false, "history_enabled": false}
+  }
+}
